@@ -27,7 +27,7 @@ spaces :: Parser String
 spaces = iter (char ? isSpace)
 
 
-main = print $ (accept "read" -# word) "read count;"
+main = print $ require "hej" "hesjsan"
 
 token :: Parser a -> Parser a
 token m = m #- spaces
@@ -46,7 +46,7 @@ accept :: String -> Parser String
 accept w = (token (chars (length w))) ? (==w)
 
 require :: String -> Parser String
-require w  = error "require not implemented"
+require w  = accept w ! error "Required string not found."
 
 lit :: Char -> Parser Char
 lit c = token char ? (==c)
