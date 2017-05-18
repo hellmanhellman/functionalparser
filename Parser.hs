@@ -1,4 +1,4 @@
-module Parser(module CoreParser, T, digit, digitVal, chars, letter, err,
+module Parser(module CoreParser, T, line, digit, digitVal, chars, letter, err,
               lit, number, iter, accept, require, token,
               spaces, word, (-#), (#-)) where
 import Prelude hiding (return, fail)
@@ -63,3 +63,9 @@ number' n = digitVal #> (\ d -> number' (10*n+d))
 number :: Parser Integer
 number = token (digitVal #> number')
 
+
+isNewLine c | c == '\n' = True
+            | otherwise = False
+            
+line :: Parser String
+line = iter (char ? not . isNewLine)
