@@ -2,7 +2,7 @@
 module TestStatement where
 
 import Statement
-p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11 :: Statement.T 
+p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12 :: Statement.T
 p1 = fromString "skip;"
 p2 = fromString "read count;"
 p3 = fromString "write count+1;"
@@ -15,6 +15,7 @@ s9 = "while n do begin fac:=fac*n; n:=n-1; end"
 p9 = fromString s9
 p10 = fromString  "begin read x ; x := x + 1 ; write x; end"
 p11 = fromString  ("begin read n; fac:=1; " ++ s9 ++ " write fac; end")
+p12 = fromString "-- this line is a comment"
 
-
+main = print $ p12
 

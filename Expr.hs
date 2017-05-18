@@ -28,8 +28,14 @@ import Parser hiding (T)
 import Data.Maybe
 import qualified Dictionary
 
-data Expr = Num Integer | Var String | Add Expr Expr
-       | Sub Expr Expr | Mul Expr Expr | Div Expr Expr
+data Expr =
+  Num Integer |
+  Var String |
+  Add Expr Expr |
+  Sub Expr Expr |
+  Mul Expr Expr |
+  Div Expr Expr |
+  Pow Expr Expr
          deriving Show
 
 type T = Expr
@@ -45,8 +51,10 @@ var = word >-> Var
 
 num = number >-> Num
 
+
 mulOp = lit '*' >-> (\ _ -> Mul) !
-        lit '/' >-> (\ _ -> Div)
+        lit '/' >-> (\ _ -> Div) !
+        lit '^' >-> (\ _ -> Pow)
 
 addOp = lit '+' >-> (\ _ -> Add) !
         lit '-' >-> (\ _ -> Sub)
@@ -73,6 +81,7 @@ shw prec (Add t u) = parens (prec>5) (shw 5 t ++ "+" ++ shw 5 u)
 shw prec (Sub t u) = parens (prec>5) (shw 5 t ++ "-" ++ shw 6 u)
 shw prec (Mul t u) = parens (prec>6) (shw 6 t ++ "*" ++ shw 6 u)
 shw prec (Div t u) = parens (prec>6) (shw 6 t ++ "/" ++ shw 7 u)
+shw prec (Pow t u) = parens (prec>6) (shw 6 t ++ "^" ++ shw 7 u)
 
 
 value :: Expr -> Dictionary.T String Integer -> Integer
@@ -80,6 +89,7 @@ value (Num n) _ = n
 value (Add l r) dict = value l dict + value r dict
 value (Sub l r) dict = value l dict - value r dict
 value (Mul l r) dict = value l dict * value r dict
+value (Pow l r) dict = value l dict ^ value r dict
 value (Var v) dict = case (Dictionary.lookup v dict) of
   Nothing -> error ("Undefined variable " ++ v ++ " encountered.")
   Just a -> a

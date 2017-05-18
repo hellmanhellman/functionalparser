@@ -27,8 +27,6 @@ spaces :: Parser String
 spaces = iter (char ? isSpace)
 
 
-main = print $ require "hej" "hesjsan"
-
 token :: Parser a -> Parser a
 token m = m #- spaces
 
@@ -46,7 +44,7 @@ accept :: String -> Parser String
 accept w = (token (chars (length w))) ? (==w)
 
 require :: String -> Parser String
-require w  = accept w ! error "Required string not found."
+require w  = accept w ! error ("Program error: Expected '" ++ w ++ "' but was disappointed.")
 
 lit :: Char -> Parser Char
 lit c = token char ? (==c)
@@ -66,6 +64,6 @@ number = token (digitVal #> number')
 
 isNewLine c | c == '\n' = True
             | otherwise = False
-            
+
 line :: Parser String
 line = iter (char ? not . isNewLine)

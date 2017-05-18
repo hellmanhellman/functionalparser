@@ -19,3 +19,5 @@ r1 = require ":=" ":= 1"     {- Just (":=","1") -}
 r2 = require "else" "then"     {- Program error: expecting else near then -}
 
 a4 = (accept "read" -# word) "read count" {-  Just ("count","") -}
+
+main = print $ a4
